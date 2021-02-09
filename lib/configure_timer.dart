@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 import 'dart:math';
 
@@ -8,60 +6,74 @@ import 'package:flutter/material.dart';
 class configureTimer extends StatefulWidget {
   int countdownTime;
   double fontSize;
-  configureTimer({this.countdownTime,this.fontSize});
+
+  configureTimer({this.countdownTime, this.fontSize});
+
   @override
-  State<StatefulWidget> createState() => TestMyAppState();
-      //_timerData(countdownTime: countdownTime,fontSize:fontSize);
-  }
+  State<StatefulWidget> createState() => _timerData(countdownTime: countdownTime, fontSize: fontSize);
+}
 
-
-class _timerData extends State<configureTimer>{
+class _timerData extends State<configureTimer> {
   int countdownTime;
   double fontSize;
-  _timerData({this.countdownTime,this.fontSize});
+
+  _timerData({this.countdownTime, this.fontSize});
+
   Timer _timer;
   final _colorList = [
     Colors.red,
     Colors.black,
   ];
+
   _showTimer() {
-    _timer=Timer.periodic(Duration(seconds: 1), (t) {
+    _timer = Timer.periodic(Duration(seconds: 1), (t) {
       //需要执行的内容
       setState(() {
         countdownTime--;
       });
       print(countdownTime);
-      if(countdownTime <= 0){
+      if (countdownTime <= 0) {
         t.cancel();
-        t =null;
+        t = null;
+        _GenerationData();
       }
       //t.cancel();		//根据需要停止定时器
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Center(child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children:
-      countdownTime == 0?getDataList():
-      <Widget>[
-        Text(countdownTime.toString(),style: TextStyle(color: countdownTime<5?_colorList[0]:_colorList[1],fontSize: fontSize,)),
-        Text('准备开始！',textAlign: TextAlign.center,)
-      ] ,
-    ),);
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: countdownTime == 0
+            ? getDataList()
+            : <Widget>[
+                Text(countdownTime.toString(),
+                    style: TextStyle(
+                      color: countdownTime < 5 ? _colorList[0] : _colorList[1],
+                      fontSize: fontSize,
+                    )),
+                Text(
+                  '准备开始！',
+                  textAlign: TextAlign.center,
+                )
+              ],
+      ),
+    );
   }
+
   @override
   void initState() {
     _showTimer();
-    _GenerationData();
     super.initState();
   }
-  void dispose() {			//类似c++中的析构函数
+
+  void dispose() {
+    //类似c++中的析构函数
     // TODO: implement dispose
-    _timer?.cancel();		//页面销毁时取消定时器（不为null时）
+    _timer?.cancel(); //页面销毁时取消定时器（不为null时）
     super.dispose();
   }
 
@@ -85,6 +97,7 @@ class _timerData extends State<configureTimer>{
   List<Widget> rList = [];
   List<String> brandList = [];
   int totalScore = 0;
+
   getDataList() {
     List<Widget> obList = [];
     List<Widget> obrList = [];
@@ -102,8 +115,7 @@ class _timerData extends State<configureTimer>{
         obrList.add(ButtonBar(
           alignment: MainAxisAlignment.center,
           children: new List<Widget>.from(obList),
-        )
-        );
+        ));
         obList.clear();
         i = 0;
       }
@@ -111,6 +123,8 @@ class _timerData extends State<configureTimer>{
     }
     return obrList;
   }
+
+  List<String> pokerType = ['', '', 'dk', 'xk', 'rk', 'ht', 'mh', 'rt'];
 
   _loopData(String str, int count) {
     for (int n = 0; n < count; n++) {
@@ -120,12 +134,13 @@ class _timerData extends State<configureTimer>{
         child: Align(
           key: Key(str),
           child: OutlineButton(
+            color: Theme.of(context).accentColor,
             textTheme: ButtonTextTheme.normal,
             child: Text(
               str,
               textAlign: TextAlign.center,
             ),
-            onPressed: (null),
+            onPressed:clickState(pokerType[count + n] + str),
           ),
         ),
       ));
@@ -142,36 +157,66 @@ class _timerData extends State<configureTimer>{
     }
   }
 
-  flop(String key){
-    if(brandList.contains(key))
-      totalScore++;
-    else
-      brandList.add(key);
+  void _incrementCounter() {
+     setState(() {
 
-    print(totalScore);
+
+  });
+}
+
+  flop(String key) {
+      if (brandList.contains(key)){
+        totalScore++;
+      } else {
+        brandList.add(key);
+      }
+      return null;
+      //print(key);
+
+      //print(totalScore);
+  }
+
+  clickState(String key) {
+    if(flop(key)==null){
+      return null;
+    }else {
+      () {return null;};
+    }
+    return (){flop(key);};
+    return () {
+      if (brandList.contains(key)) {
+        return null;
+      } else {
+        print(key);
+        brandList.add(key);
+      }
+    };
+
+    /*else
+      brandList.add(key);*/
   }
 }
 class TestMyAppState extends State<configureTimer> {
-  bool _isButton1Disabled;
+  bool _isButton1Disabled = true;
   int _counter = 1;
 
   GlobalKey<ScaffoldState> _key;
 
-  @override
+  /*@override
   void initState() {
-    _isButton1Disabled = false;
+    //_isButton1Disabled = false;
   }
 
   void _incrementCounter() {
-    setState(() {
+   *//* setState(() {
       _counter++;
       if (_counter % 2 == 0) {
         _isButton1Disabled = true;
       } else {
         _isButton1Disabled = false;
       }
-    });
-  }
+    });*//*
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +239,16 @@ class TestMyAppState extends State<configureTimer> {
     List<Widget> list = [
       _buildButton1(_counter),
       _buildSpaceView(20.0), //在两个按钮间添加一点间隔
-      _buildButton2()
+      _buildButton2(),
+      OutlineButton(
+        color: Theme.of(context).accentColor,
+        textTheme: ButtonTextTheme.normal,
+        child: Text(
+          'tets',
+          textAlign: TextAlign.center,
+        ),
+        onPressed:_getBtn2ClickListener(),
+      ),
     ];
 
     return list;
@@ -239,9 +293,7 @@ class TestMyAppState extends State<configureTimer> {
   }
 
   Function _getBtn2ClickListener() {
-    return () {
-      _incrementCounter();
-    };
+    return null;
   }
 
   _getBtn1ClickListener() {

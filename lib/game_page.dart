@@ -71,7 +71,7 @@ class _MyGameHomePageState extends State<gamePageHome> {
               print('返回');
             }),
       ),
-      body: configureTimer(countdownTime: 10,fontSize: 50,),
+      body: configureTimer(countdownTime: 1,fontSize: 50,),
       // AlertDialogType(titleWidget: new configureTimer(countdownTime:10,fontSize: 50,))
       /*Center(
         child: Column(
