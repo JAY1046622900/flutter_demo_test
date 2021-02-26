@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_demo/test_setState.dart';
+import 'package:flutter_app_demo/test_anmation.dart';
 
 import 'game_page.dart';
 
@@ -16,7 +17,7 @@ class ModeSelection {
         borderSide: BorderSide(color: Colors.blue, style: BorderStyle.none),
         onPressed: () {
           Navigator.push(
-              context,i==0? MaterialPageRoute(builder: (context) => GamePage(lastPage:context)):i==1?MaterialPageRoute(builder: (context) => testSetState()):MaterialPageRoute(builder: (context) => GamePage(lastPage:context)),);
+              context,i==0? MaterialPageRoute(builder: (context) => GamePage(lastPage:context)):i==1?MaterialPageRoute(builder: (context) => testSetState()):MaterialPageRoute(builder: (context) => MyTestAnmation()),);
           // Respond to button press
         },
         child: Text(
