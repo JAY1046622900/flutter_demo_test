@@ -310,14 +310,14 @@ class _FlipPanelState<T> extends State<FlipPanel>
           alignment: Alignment.bottomCenter,
           transform: Matrix4.identity()
             ..setEntry(3, 2, _perspective)
-            ..rotateX(_zeroAngle),
+            ..rotateY(_zeroAngle),
           child: _upperChild1
       ),
       Transform(
         alignment: Alignment.bottomCenter,
         transform: Matrix4.identity()
           ..setEntry(3, 2, _perspective)
-          ..rotateX(_isReversePhase ? _animation.value : math.pi / 2),
+          ..rotateY(_isReversePhase ? _animation.value : math.pi / 2),
         child: _upperChild2,
       ),
     ],
@@ -328,14 +328,14 @@ class _FlipPanelState<T> extends State<FlipPanel>
           alignment: Alignment.bottomCenter,
           transform: Matrix4.identity()
             ..setEntry(3, 2, _perspective)
-            ..rotateX(_zeroAngle),
+            ..rotateY(_zeroAngle),
           child: _upperChild2
       ),
       Transform(
         alignment: Alignment.bottomCenter,
         transform: Matrix4.identity()
           ..setEntry(3, 2, _perspective)
-          ..rotateX(_isReversePhase ? math.pi / 2 : _animation.value),
+          ..rotateY(_isReversePhase ? math.pi / 2 : _animation.value),
         child: _upperChild1,
       ),
     ],
@@ -348,14 +348,14 @@ class _FlipPanelState<T> extends State<FlipPanel>
           alignment: Alignment.topCenter,
           transform: Matrix4.identity()
             ..setEntry(3, 2, _perspective)
-            ..rotateX(_zeroAngle),
+            ..rotateY(_zeroAngle),
           child: _lowerChild2
       ),
       Transform(
         alignment: Alignment.topCenter,
         transform: Matrix4.identity()
           ..setEntry(3, 2, _perspective)
-          ..rotateX(_isReversePhase ? math.pi / 2 : -_animation.value),
+          ..rotateY(_isReversePhase ? math.pi / 2 : -_animation.value),
         child: _lowerChild1,
       )
     ],
@@ -366,14 +366,14 @@ class _FlipPanelState<T> extends State<FlipPanel>
           alignment: Alignment.topCenter,
           transform: Matrix4.identity()
             ..setEntry(3, 2, _perspective)
-            ..rotateX(_zeroAngle),
+            ..rotateY(_zeroAngle),
           child: _lowerChild1
       ),
       Transform(
         alignment: Alignment.topCenter,
         transform: Matrix4.identity()
           ..setEntry(3, 2, _perspective)
-          ..rotateX(_isReversePhase ? -_animation.value : math.pi / 2),
+          ..rotateY(_isReversePhase ? -_animation.value : math.pi / 2),
         child: _lowerChild2,
       )
     ],
@@ -404,7 +404,7 @@ class _FlipPanelState<T> extends State<FlipPanel>
             alignment: Alignment.bottomCenter,
             transform: Matrix4.identity()
               ..setEntry(3, 2, _perspective)
-              ..rotateX(_zeroAngle),
+              ..rotateY(_zeroAngle),
             child: _upperChild1
         ),
         Padding(
@@ -414,7 +414,7 @@ class _FlipPanelState<T> extends State<FlipPanel>
             alignment: Alignment.topCenter,
             transform: Matrix4.identity()
               ..setEntry(3, 2, _perspective)
-              ..rotateX(_zeroAngle),
+              ..rotateY(_zeroAngle),
             child: _lowerChild1
         )
       ],

@@ -31,8 +31,10 @@ class testPage extends StatefulWidget {
 }
 
 class contentPage extends State<testPage> with TickerProviderStateMixin {
-  AnimationController animationController,animationController1;
-  var animation,animation1;
+  AnimationController animationController, animationController1;
+  var animation, animation1;
+  double _rotateX = .0;
+  double _rotateY = .0;
 
   @override
   void initState() {
@@ -83,9 +85,48 @@ class contentPage extends State<testPage> with TickerProviderStateMixin {
       });*/
     //动画数值使用0度角到90度角
     // _animation = Tween(begin: _zeroAngle, end: pi / 2).animate(_controller);
+    /* animationController1 =
+        AnimationController(duration: Duration(milliseconds: 1000), vsync: this)..addStatusListener((status) {
+          //动画正向执行,正向执行结束后进行反向执行
+          if (status == AnimationStatus.completed) {
+            //animationController1.reverse();
+            //_isReversePhase = true;
+          } //动画反向执行，反向执行结束后一次动画翻转周期结束。当前数字更新到最新的
+          if (status == AnimationStatus.dismissed) {
+            // animationController.forward();
+            // animationController = false;
+            // _stateNum += 1;
+          }
+        });*/
     animationController1 =
-        AnimationController(duration: Duration(seconds: 2), vsync: this);
-    animation1 = Tween(begin: 1.0, end: 0.2).animate(animationController1);
+        AnimationController(duration: Duration(milliseconds: 1000), vsync: this)
+          ..addStatusListener((status) {
+            print(animation1.value);
+            print(_rotateX);
+            /*_rotateX += animation1.value * .09;
+            _rotateY += animation1.value * -.09;*/
+            print(animation1.value);
+            //动画正向执行,正向执行结束后进行反向执行
+            if (status == AnimationStatus.completed) {
+
+               //animationController1.reverse();
+              //_isReversePhase = true;
+            } //动画反向执行，反向执行结束后一次动画翻转周期结束。当前数字更新到最新的
+            if (status == AnimationStatus.dismissed) {
+              // animationController.forward();
+              // animationController = false;
+              // _stateNum += 1;
+            }
+          });
+    animationController1.addListener(() {
+      setState(() {
+        if (animationController.status == AnimationStatus.completed) {
+          //animationController.repeat();
+        }
+      });
+    });
+    animation1 =
+        Tween(begin: 0.0001, end: pi / 2).animate(animationController1);
     super.initState();
   }
 
@@ -99,25 +140,41 @@ class contentPage extends State<testPage> with TickerProviderStateMixin {
     return Center(
         child: GestureDetector(
             onTap: () {
-              animationController..forward();
+              animationController1..forward();
               setState(() {
                 click = !click;
               });
             },
-            child: Container(
-                width: 30,
-                height: 50,
-                child: OutlineButton(
-                  padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                    child: Stack(children: <Widget>[
-                  PositionedTransition(
-                    rect: animation,
-                    child: Container(
-                      color: click ? Colors.blue : Colors.red,
-                      //child: click ? Text('1') : Text('2'),
-                    ),
-                  )
-                ])))));
+            child: new AnimatedBuilder(
+                animation: animationController1,
+                builder: (BuildContext context, Widget _widget) {
+                  return Transform(
+                      alignment: Alignment.topCenter,
+                      transform: Matrix4.identity()
+                        ..setEntry(3, 2, .001)
+                        ..rotateY(animation1.value)
+                        ..setEntry(3, 2, .000)
+                        ..rotateY(animation1.value),
+                      /* ..setEntry(3, 2, 0.001)
+                        ..rotateY(animation1.value),*/
+                      child: _widget);
+                },
+                child: Container(
+                    width: 100,
+                    height: 200,
+                    child: OutlineButton(
+                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 1.0,
+                            ),
+                            color: click ? Colors.red : Colors.white,
+                          ),
+                          child:
+                              Center(child: click ? Text('data') : Text('1')),
+                        ))))));
     return Center(
       child: GestureDetector(
         onTap: () {

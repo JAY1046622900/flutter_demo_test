@@ -94,17 +94,17 @@ class pokeData extends StatefulWidget {
 class pokeGenerationData extends State<pokeData> with TickerProviderStateMixin {
   AnimationController animationController, animationController1;
   RelativeRectTween rectTween;
-  var animation, animation1;
+  var animation;
 
   @override
   void initState() {
     _GenerationData();
-    animationController =
+   /* animationController =
         new AnimationController(duration: Duration(seconds: 1), vsync: this)
           ..addStatusListener((status) {
             //动画正向执行,正向执行结束后进行反向执行
             if (status == AnimationStatus.completed) {
-              animationController.reverse();
+              //animationController.reverse();
               //_isReversePhase = true;
             } //动画反向执行，反向执行结束后一次动画翻转周期结束。当前数字更新到最新的
             if (status == AnimationStatus.dismissed) {
@@ -112,9 +112,9 @@ class pokeGenerationData extends State<pokeData> with TickerProviderStateMixin {
               // animationController = false;
               // _stateNum += 1;
             }
-          });
+          });*/
     //animation = Tween(begin: 0.0, end: -12.0 * pi).animate(animationController);
-    rectTween = RelativeRectTween(
+   /* rectTween = RelativeRectTween(
       //初始位置设置
       begin: const RelativeRect.fromLTRB(
           //子widget 距父布局 left 10.0
@@ -140,7 +140,7 @@ class pokeGenerationData extends State<pokeData> with TickerProviderStateMixin {
 
     //关联 controller
     animation = rectTween.animate(animationController);
-    animation1 = Tween(begin: 1.0, end: 0.2).animate(animationController1);
+    animation1 = Tween(begin: 1.0, end: 0.2).animate(animationController1);*/
     super.initState();
   }
 
@@ -242,6 +242,19 @@ class pokeGenerationData extends State<pokeData> with TickerProviderStateMixin {
 
   bool click = false;
 
+
+  getMatrix4(String k){
+    if(keyBlMap[k]){
+      return Matrix4.identity()
+        ..setEntry(3, 2, .003)
+        ..rotateY(Tween(begin: .0, end: pi / 2).animate(animationMap[k]).value);
+    }else {
+      return Matrix4.identity()
+        ..rotateY(Tween(begin: pi / 2, end:.0 ).animate(animationMap[k]).value);
+    }
+
+
+  }
   List<Widget> _GenerationData1() {
     List<Widget> obList = [];
     obrList.clear();
@@ -265,7 +278,35 @@ class pokeGenerationData extends State<pokeData> with TickerProviderStateMixin {
             key: Key(k),
             textTheme: ButtonTextTheme.normal,
             padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-            child: SizeTransition(
+            child: new AnimatedBuilder(
+                animation: animationMap[k]..addStatusListener((status){
+                  print(k+'animationMap:'+animationMap[k].value.toString());
+                  if(animationMap[k].status == AnimationStatus.completed && keyBlMap[k]){
+                    setState(() {
+                      keyBlMap[k] = false;
+                      animationMap[k].forward();
+                    });
+                  }
+                }),
+                builder: (BuildContext context, Widget _widget) {
+                  return Transform(
+                      alignment: Alignment.topCenter,
+                      transform: getMatrix4(k),
+                      /* ..setEntry(3, 2, 0.001)
+                        ..rotateY(animation1.value),*/
+                      child: _widget);
+                },
+                child:  Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 1.0,
+                        ),
+                        color: keyBlMap[k]?Colors.red:Colors.white,
+                      ),
+                      child:
+                      Center(child: keyBlMap[k]?Text('data'):Text(k)),
+                    )),/*SizeTransition(
                 axis: Axis.horizontal,
                 sizeFactor: Tween(begin: 1.0, end: 0.0).animate(animationMap[k])
                   ..addStatusListener((status) {
@@ -287,7 +328,7 @@ class pokeGenerationData extends State<pokeData> with TickerProviderStateMixin {
                     ),
                     child: Center(child: keyBlMap[k]?Text('data'):Text(k)),
                   ),
-                )),
+                )),*/
             /*Stack(children: <Widget>[
               PositionedTransition(
                 rect: rectTween.animate(animationMap[k]
@@ -318,6 +359,7 @@ class pokeGenerationData extends State<pokeData> with TickerProviderStateMixin {
       ));
       if (i == 6) {
         obrList.add(ButtonBar(
+          mainAxisSize:MainAxisSize.min,
           alignment: MainAxisAlignment.center,
           children: new List<Widget>.from(obList),
         ));
@@ -388,12 +430,12 @@ class pokeGenerationData extends State<pokeData> with TickerProviderStateMixin {
           }
         }
         brandList.add(keyEqualMap[key]);
-        animationMap[key].forward();
-        /*setState(() {
-         // keyBlMap[key] = false;
+        //animationMap[key].forward();
+        setState(() {
+          print(key);
           click = !click;
           animationMap[key].forward();
-        });*/
+        });
       };
     } else {
       return null;
